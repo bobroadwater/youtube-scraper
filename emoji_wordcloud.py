@@ -1,7 +1,9 @@
 import os
 import string
 import random
-from wordcloud import WordCloud
+from PIL import Image
+import numpy as np
+from wordcloud import WordCloud, ImageColorGenerator
 
 def grey_color_func(word, font_size, position, orientation, random_state=None,
                     **kwargs):
@@ -21,15 +23,19 @@ emoji = r"(?:[^\s])(?<![\w{ascii_printable}])".format(ascii_printable=string.pri
 #                                                      emoji=emoji)
 regexp = r"{ascii_art}|{emoji}".format(ascii_art=ascii_art, emoji=emoji)
 
+mask = np.array(Image.open("masks/borders_neon.png"))
+
 # Generate a word cloud image
 # EmojiOne font https://github.com/13rac1/emojione-color-font#install-on-windows
-wc = WordCloud(background_color=None, mode='RGBA', height=1080, width=1920, 
+wc = WordCloud(background_color=None, mode='RGBA', mask=mask, height=1080, width=1920,
                font_path='EmojiOneColor-SVGinOT.ttf', regexp=regexp).generate(text)
+
 # wc.recolor(color_func=grey_color_func, random_state=3)
+# image_colors = ImageColorGenerator(mask)
+# wc.recolor(color_func=image_colors)
 
-
-wc.to_file('wc_emoji-color.png')
-import matplotlib.pyplot as plt
-plt.imshow(wc)
-plt.axis("off")
-plt.show()
+wc.to_file('wordclouds/wc_emoji_neon_clear_borders.png')
+# import matplotlib.pyplot as plt
+# plt.imshow(wc)
+# plt.axis("off")
+# plt.show()

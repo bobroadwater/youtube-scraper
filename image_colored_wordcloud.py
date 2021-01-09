@@ -8,10 +8,11 @@ comments = open('comments.txt', encoding='utf-8').read()
 
 # read the mask
 logo_coloring = np.array(Image.open("pic_logo.png"))
+print(np.shape(logo_coloring))
 stopwords = set(STOPWORDS)
 stopwords.add("I")
 
-# wc = WordCloud(background_color=None, mode="RGBA", max_words=2000, mask=logo_coloring,
+# wc = WordCloud(background_color="black", max_words=2000, mask=logo_coloring,
 #                stopwords=stopwords, max_font_size=40, random_state=42, scale=3)
 wc = WordCloud(background_color=None,  mode='RGBA', max_words=2000, mask=logo_coloring,
                stopwords=stopwords, max_font_size=40, random_state=42, scale=3)
@@ -21,6 +22,7 @@ wc.generate(comments)
 # create coloring from image
 # image_colors = ImageColorGenerator(logo_coloring)
 image_colors = ImageColorGenerator(np.array(Image.open("neon_stretch.png")))
+print(np.shape(image_colors.image))
 wc.recolor(color_func=image_colors)
 
 wc.to_file('wc_clear-neon_clear-bkg.png')
